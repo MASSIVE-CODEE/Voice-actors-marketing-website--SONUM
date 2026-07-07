@@ -1,0 +1,233 @@
+/* Social Media Modal Dark Theme Styling */
+
+.social-media-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 54px;
+    height: 54px;
+    background-color: var(--accent-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-glow);
+    z-index: 100;
+    border: none;
+    font-size: 1.6rem;
+    color: #000;
+    
+    /* Animation attributes */
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px) scale(0.9);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.social-media-button.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.social-media-button:hover {
+    transform: translateY(-4px) scale(1.08);
+    background-color: #12d393;
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+}
+
+#socialModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(4, 5, 7, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    backdrop-filter: blur(12px);
+}
+
+#socialModal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.social-modal-content {
+    position: relative;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 3rem 2.5rem 2.5rem 2.5rem;
+    max-width: 520px;
+    width: 90%;
+    box-shadow: var(--shadow-hover);
+    transform: scale(0.95) translateY(15px);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#socialModal.active .social-modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.social-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+}
+
+.social-modal-close:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    transform: rotate(90deg);
+}
+
+.social-modal-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.social-modal-title {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+}
+
+.social-modal-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.social-message {
+    background: rgba(99, 102, 241, 0.05);
+    border-left: 3px solid var(--accent-indigo);
+    padding: 1rem 1.2rem;
+    border-radius: 6px;
+    text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.social-message p {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+
+.social-links-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.social-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.2rem 0.8rem;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.social-link ion-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+.social-link-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+}
+
+.social-link-handle {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Platform Specific Hover Colors */
+.social-link[data-platform="twitter"]:hover {
+    background: #0f1419;
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.social-link[data-platform="instagram"]:hover {
+    background: rgba(219, 44, 98, 0.1);
+    border-color: #db2c62;
+    color: #db2c62;
+}
+
+.social-link[data-platform="facebook"]:hover {
+    background: rgba(24, 119, 242, 0.1);
+    border-color: #1877f2;
+    color: #1877f2;
+}
+
+.social-link:hover ion-icon {
+    transform: translateY(-3px) scale(1.05);
+}
+
+.social-divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border-color);
+    margin: 1.5rem 0;
+}
+
+/* Responsive Adaptive Adjustments */
+@media (max-width: 600px) {
+    .social-links-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    
+    .social-link {
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 0.8rem 1.2rem;
+        gap: 1rem;
+    }
+    
+    .social-link ion-icon {
+        margin-bottom: 0;
+        font-size: 1.6rem;
+    }
+    
+    .social-link-handle {
+        margin-top: 0;
+        margin-left: auto;
+    }
+}

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Talent | SONUM</title>
+    <meta name="description" content="Browse, filter, and hire top-rated voice actors instantly on the SONUM casting platform.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="CSS/main-style.css">
+    <link rel="stylesheet" href="CSS/auth-modal.css">
+    <link rel="stylesheet" href="CSS/hirers.css">
+    
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+    <script src="JS/main.js" defer></script>
+    <script src="JS/auth.js" defer></script>
+    <script src="JS/hirers.js" defer></script>
+    <script src="JS/parallax.js" defer></script>
+    <link rel="shortcut icon" href="image/Favicon.png" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="logo" id="headerLogo">
+            <ion-icon name="radio-outline"></ion-icon>SONUM
+        </div>
+        <nav class="nav" aria-label="Main Navigation">
+            <ul>
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#services">Categories</a></li>
+                <li><a href="#talent-browse" class="active">Find Talent</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="#" class="btn secondary-btn" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;" data-auth-trigger>Sign In</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="talent-browse">
+        <div class="talent-hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Discover Elite Voices</h1>
+                <p class="hero-subtitle">Instantly preview and hire leading actors for any production scope.</p>
+            </div>
+        </div>
+
+        <section class="talent-section">
+            <div class="section-header">
+                <h2 class="section-title">Browse Casting Roster</h2>
+                
+                <div class="filter-controls">
+                    <input type="text" id="searchInput" class="search-box" placeholder="Search by name, vocal descriptor, accent, gear...">
+                    
+                    <select id="categoryFilter" class="filter-dropdown" aria-label="Vocal Category Filter">
+                        <option value="">All Categories</option>
+                        <option value="Commercial & Adverts">Commercial & Adverts</option>
+                        <option value="Animation & Gaming">Animation & Gaming</option>
+                        <option value="Audiobooks & Narration">Audiobooks & Narration</option>
+                        <option value="Documentary">Documentary</option>
+                        <option value="Podcast">Podcast</option>
+                    </select>
+                    
+                    <select id="usageFilter" class="filter-dropdown" aria-label="Usage Rights Filter">
+                        <option value="">Any Usage Rights</option>
+                        <option value="global broadcast">Global Broadcast</option>
+                        <option value="internal corporate">Internal Corporate</option>
+                        <option value="digital paid social">Digital Paid Social</option>
+                    </select>
+
+                    <div class="tag-filters" aria-label="Vocal Descriptor Filter Tags">
+                        <button type="button" class="filter-tag-btn" data-tag="deep corporate">Deep Corporate</button>
+                        <button type="button" class="filter-tag-btn" data-tag="energetic commercial">Energetic Commercial</button>
+                        <button type="button" class="filter-tag-btn" data-tag="warm narrative">Warm Narrative</button>
+                        <button type="button" class="filter-tag-btn" data-tag="cinematic">Cinematic</button>
+                        <button type="button" class="filter-tag-btn" data-tag="gaming">Gaming</button>
+                        <button type="button" class="filter-tag-btn" data-tag="mandarin">Mandarin</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audio Player Dock -->
+            <div id="audioPlayerDock" class="audio-player-dock" aria-live="polite">
+                <div>
+                    <span class="player-kicker">Reel Audition Monitor</span>
+                    <h3 id="playerTalentName">Select a reel to preview</h3>
+                    <p id="playerDemoMeta">Waveform scrubber synchronizes inline instantly</p>
+                </div>
+                <div class="waveform-player">
+                    <button id="playerToggle" class="player-toggle" type="button" aria-label="Play or Pause selected reel">
+                        <ion-icon name="play" id="playerToggleIcon"></ion-icon>
+                    </button>
+                    <div class="waveform-track" id="waveformTrack" role="slider" aria-label="Audio scrubber track" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+                        <div class="waveform-progress" id="waveformProgress"></div>
+                        <span style="height: 35%"></span>
+                        <span style="height: 60%"></span>
+                        <span style="height: 40%"></span>
+                        <span style="height: 80%"></span>
+                        <span style="height: 50%"></span>
+                        <span style="height: 70%"></span>
+                        <span style="height: 30%"></span>
+                        <span style="height: 90%"></span>
+                        <span style="height: 65%"></span>
+                        <span style="height: 45%"></span>
+                        <span style="height: 85%"></span>
+                        <span style="height: 55%"></span>
+                        <span style="height: 75%"></span>
+                        <span style="height: 40%"></span>
+                        <span style="height: 95%"></span>
+                        <span style="height: 60%"></span>
+                        <span style="height: 80%"></span>
+                        <span style="height: 50%"></span>
+                        <span style="height: 85%"></span>
+                        <span style="height: 35%"></span>
+                    </div>
+                    <span id="playerTime" class="player-time">0:00 / 0:00</span>
+                </div>
+            </div>
+
+            <div class="talent-grid" id="talentGrid">
+                <!-- Alex Carter -->
+                <div class="talent-card-large" data-search="alex carter baritone deep corporate cinematic gritty american english broadcast commercial global broadcast neumann tlm 103 apollo twin source connect 24 hour turnaround" data-usage="global broadcast" data-tags="deep corporate, cinematic, gritty, american english, broadcast">
+                    <div class="talent-header">
+                        <div class="talent-avatar-large" style="background-image: url('image/Alex Carter.jpg');"></div>
+                        <div class="talent-header-info">
+                            <h3>Alex Carter</h3>
+                            <p class="specialty">Baritone | Deep Corporate, Cinematic, Gritty</p>
+                            <div class="rating">
+                                <span class="stars"><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon></span>
+                                <span class="rating-count">(248 reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="talent-body">
+                        <p class="talent-bio">Professional voice actor with 10+ years of studio experience in cinema trailers and corporate launches. Known for a commanding, resonant delivery.</p>
+                        <div class="talent-tags">
+                            <span class="tag">Commercial</span>
+                            <span class="tag">Cinema</span>
+                            <span class="tag">Dramatic</span>
+                            <span class="tag">American English</span>
+                        </div>
+                        <div class="profile-details">
+                            <span><strong>Age sound:</strong> 35-50</span>
+                            <span><strong>Tone:</strong> Resonant, commanding</span>
+                            <span><strong>Accent:</strong> Neutral American</span>
+                            <span><strong>Language:</strong> English</span>
+                            <span><strong>Studio:</strong> Neumann TLM 103, Apollo Twin</span>
+                            <span><strong>Turnaround:</strong> 24 hours</span>
+                        </div>
+                        <div class="talent-stats">
+                            <div class="stat">
+                                <span class="stat-value">250+</span>
+                                <span class="stat-label">Bookings</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">4.9</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">$150/hr</span>
+                                <span class="stat-label">Standard Rate</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="talent-actions">
+                        <button class="btn primary-btn listen-btn" data-duration="32" data-demo="Corporate authority reel" data-talent="Alex Carter"><ion-icon name="play-outline"></ion-icon> Listen to Reel</button>
+                        <button class="btn roster-btn" type="button" data-talent="Alex Carter"><ion-icon name="bookmark-outline"></ion-icon> Favorite</button>
+                        <button class="btn secondary-btn hire-btn" data-talent="Alex Carter" data-rate="150" data-hire-action><ion-icon name="flash-outline"></ion-icon> Book Talent</button>
+                    </div>
+                </div>
+
+                <!-- Sarah Jenkins -->
+                <div class="talent-card-large" data-search="sarah jenkins alto energetic commercial youthful british english animation gaming character digital paid social rode nt1 ssl2 12 hour turnaround" data-usage="digital paid social" data-tags="energetic commercial, youthful, british english, animation, gaming">
+                    <div class="talent-header">
+                        <div class="talent-avatar-large" style="background-image: url('image/Seraph Jenkins.jpg');"></div>
+                        <div class="talent-header-info">
+                            <h3>Sarah Jenkins</h3>
+                            <p class="specialty">Alto | Energetic Commercial, Youthful</p>
+                            <div class="rating">
+                                <span class="stars"><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star-half"></ion-icon></span>
+                                <span class="rating-count">(156 reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="talent-body">
+                        <p class="talent-bio">Dynamic voice actress specializing in gaming NPCs, animation series, and high-energy paid socials. Brings voice versatility and speed.</p>
+                        <div class="talent-tags">
+                            <span class="tag">Animation</span>
+                            <span class="tag">Gaming</span>
+                            <span class="tag">Character</span>
+                            <span class="tag">British English</span>
+                        </div>
+                        <div class="profile-details">
+                            <span><strong>Age sound:</strong> 18-30</span>
+                            <span><strong>Tone:</strong> Bright, conversational</span>
+                            <span><strong>Accent:</strong> British Neutral</span>
+                            <span><strong>Language:</strong> English</span>
+                            <span><strong>Studio:</strong> Rode NT1, Treated Booth</span>
+                            <span><strong>Turnaround:</strong> 12 hours</span>
+                        </div>
+                        <div class="talent-stats">
+                            <div class="stat">
+                                <span class="stat-value">160+</span>
+                                <span class="stat-label">Bookings</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">4.8</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                            <div class="stat-value">$120/hr</div>
+                        </div>
+                    </div>
+                    <div class="talent-actions">
+                        <button class="btn primary-btn listen-btn" data-duration="28" data-demo="Energetic commercial reel" data-talent="Sarah Jenkins"><ion-icon name="play-outline"></ion-icon> Listen to Reel</button>
+                        <button class="btn roster-btn" type="button" data-talent="Sarah Jenkins"><ion-icon name="bookmark-outline"></ion-icon> Favorite</button>
+                        <button class="btn secondary-btn hire-btn" data-talent="Sarah Jenkins" data-rate="120" data-hire-action><ion-icon name="flash-outline"></ion-icon> Book Talent</button>
+                    </div>
+                </div>
+
+                <!-- Marcus Reed -->
+                <div class="talent-card-large" data-search="marcus reed tenor narrative documentary warm educational french english internal corporate sennheiser mkh 416 rme babyface 48 hour turnaround" data-usage="internal corporate" data-tags="warm documentary, educational, french english, narrative, internal corporate">
+                    <div class="talent-header">
+                        <div class="talent-avatar-large" style="background-image: url('image/marcus reed.jpg');"></div>
+                        <div class="talent-header-info">
+                            <h3>Marcus Reed</h3>
+                            <p class="specialty">Tenor | Warm Documentary, Educational</p>
+                            <div class="rating">
+                                <span class="stars"><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon></span>
+                                <span class="rating-count">(312 reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="talent-body">
+                        <p class="talent-bio">Award-winning narrator specializing in audiobook productions, long-form historical documentaries, and corporate modules with total clarity.</p>
+                        <div class="talent-tags">
+                            <span class="tag">Narration</span>
+                            <span class="tag">Documentary</span>
+                            <span class="tag">E-Learning</span>
+                            <span class="tag">French / English</span>
+                        </div>
+                        <div class="profile-details">
+                            <span><strong>Age sound:</strong> 30-45</span>
+                            <span><strong>Tone:</strong> Warm, educational</span>
+                            <span><strong>Accent:</strong> Mid-Atlantic French</span>
+                            <span><strong>Language:</strong> French, English</span>
+                            <span><strong>Studio:</strong> Sennheiser MKH 416, RME</span>
+                            <span><strong>Turnaround:</strong> 48 hours</span>
+                        </div>
+                        <div class="talent-stats">
+                            <div class="stat">
+                                <span class="stat-value">320+</span>
+                                <span class="stat-label">Bookings</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">4.95</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">$180/hr</span>
+                                <span class="stat-label">Standard Rate</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="talent-actions">
+                        <button class="btn primary-btn listen-btn" data-duration="36" data-demo="Documentary narration reel" data-talent="Marcus Reed"><ion-icon name="play-outline"></ion-icon> Listen to Reel</button>
+                        <button class="btn roster-btn" type="button" data-talent="Marcus Reed"><ion-icon name="bookmark-outline"></ion-icon> Favorite</button>
+                        <button class="btn secondary-btn hire-btn" data-talent="Marcus Reed" data-rate="180" data-hire-action><ion-icon name="flash-outline"></ion-icon> Book Talent</button>
+                    </div>
+                </div>
+
+                <!-- Jessica Wong -->
+                <div class="talent-card-large" data-search="jessica wong soprano commercial podcast friendly conversational mandarin english global broadcast shure sm7b focusrite 18 hour turnaround" data-usage="global broadcast" data-tags="friendly commercial, conversational, mandarin english, podcast, global broadcast">
+                    <div class="talent-header">
+                        <div class="talent-avatar-large" style="background-image: url('image/Jessica Wong.jpg');"></div>
+                        <div class="talent-header-info">
+                            <h3>Jessica Wong</h3>
+                            <p class="specialty">Soprano | Friendly Commercial, Podcast</p>
+                            <div class="rating">
+                                <span class="stars"><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon></span>
+                                <span class="rating-count">(189 reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="talent-body">
+                        <p class="talent-bio">Conversational commercial specialist and podcast host. Fluent bilingual reads in English and Mandarin, perfect for international campaigns.</p>
+                        <div class="talent-tags">
+                            <span class="tag">Commercial</span>
+                            <span class="tag">Podcast</span>
+                            <span class="tag">Conversational</span>
+                            <span class="tag">Bilingual</span>
+                        </div>
+                        <div class="profile-details">
+                            <span><strong>Age sound:</strong> 25-40</span>
+                            <span><strong>Tone:</strong> Friendly, relatable</span>
+                            <span><strong>Accent:</strong> Neutral Mandarin / US</span>
+                            <span><strong>Language:</strong> English, Mandarin</span>
+                            <span><strong>Studio:</strong> Shure SM7B, treated booth</span>
+                            <span><strong>Turnaround:</strong> 18 hours</span>
+                        </div>
+                        <div class="talent-stats">
+                            <div class="stat">
+                                <span class="stat-value">200+</span>
+                                <span class="stat-label">Bookings</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">4.9</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">$135/hr</span>
+                                <span class="stat-label">Standard Rate</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="talent-actions">
+                        <button class="btn primary-btn listen-btn" data-duration="30" data-demo="Friendly retail reel" data-talent="Jessica Wong"><ion-icon name="play-outline"></ion-icon> Listen to Reel</button>
+                        <button class="btn roster-btn" type="button" data-talent="Jessica Wong"><ion-icon name="bookmark-outline"></ion-icon> Favorite</button>
+                        <button class="btn secondary-btn hire-btn" data-talent="Jessica Wong" data-rate="135" data-hire-action><ion-icon name="flash-outline"></ion-icon> Book Talent</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Workspace Modules -->
+        <section class="marketplace-workspace">
+            <!-- Job Posting Panel -->
+            <div class="workspace-panel job-posting-panel">
+                <h2><ion-icon name="create-outline" style="vertical-align: middle; margin-right: 0.5rem; color: var(--accent-primary);"></ion-icon>Post Casting Call</h2>
+                <form class="job-posting-form" id="jobPostingForm">
+                    <label>Project Title
+                        <input type="text" id="jobTitle" value="Global fintech launch film" required>
+                    </label>
+                    <label>Exact Word Count
+                        <input type="number" id="jobWords" value="750" min="1" required>
+                    </label>
+                    <label>Usage Rights Scope
+                        <select id="jobUsage">
+                            <option value="global broadcast">Global Broadcast</option>
+                            <option value="internal corporate">Internal Corporate</option>
+                            <option value="digital paid social">Digital Paid Social</option>
+                            <option value="organic web only">Organic Web Only</option>
+                        </select>
+                    </label>
+                    <label>Budget Allocation ($)
+                        <input type="number" id="jobBudget" value="1000" min="50" required>
+                    </label>
+                    <label>Upload Script Document (.txt, .pdf)
+                        <input type="file" id="jobScript" accept=".pdf,.doc,.docx,.txt">
+                    </label>
+                    <button class="btn primary-btn" type="submit"><ion-icon name="cloud-upload-outline"></ion-icon> Broadcast Casting Call</button>
+                </form>
+            </div>
+
+            <!-- Escrow Checkout Panel -->
+            <div class="workspace-panel escrow-panel">
+                <h2><ion-icon name="lock-closed-outline" style="vertical-align: middle; margin-right: 0.5rem; color: var(--accent-gold);"></ion-icon>Escrow Settlement</h2>
+                <div class="escrow-steps">
+                    <div id="step-1" class="active-step">
+                        <strong>1. Hold Booking Budget</strong>
+                        <span>Funds held securely by platform</span>
+                    </div>
+                    <div id="step-2">
+                        <strong>2. Audio Recording Review</strong>
+                        <span>Pending client approval triggers</span>
+                    </div>
+                    <div id="step-3">
+                        <strong>3. Release Payout</strong>
+                        <span>Talent wallet credited instantly</span>
+                    </div>
+                </div>
+                <button class="btn primary-btn" id="fundEscrowBtn" type="button"><ion-icon name="wallet-outline"></ion-icon> Fund Escrow Checkout</button>
+                <p id="escrowStatus">Awaiting checkout initiation.</p>
+            </div>
+
+            <!-- Audition Hub Panel -->
+            <div class="workspace-panel audition-panel">
+                <h2><ion-icon name="git-compare-outline" style="vertical-align: middle; margin-right: 0.5rem; color: var(--accent-indigo);"></ion-icon>Audition Hub</h2>
+                <div class="audition-compare">
+                    <article>
+                        <h3>Alex Carter</h3>
+                        <p>$950 fixed · 24h delivery</p>
+                        <button class="mini-audio" type="button" data-src="A"><ion-icon name="play-circle-outline"></ion-icon> Read A</button>
+                    </article>
+                    <article>
+                        <h3>Jessica Wong</h3>
+                        <p>$880 fixed · 18h delivery</p>
+                        <button class="mini-audio" type="button" data-src="B"><ion-icon name="play-circle-outline"></ion-icon> Read B</button>
+                    </article>
+                </div>
+                <label>Audio Performance Revisions
+                    <textarea id="revisionNote" rows="3">00:14 soften the brand name, 00:22 build confidence and drop vocal pitch.</textarea>
+                </label>
+                <button class="btn secondary-btn" id="saveRevisionBtn" type="button"><ion-icon name="save-outline"></ion-icon> Log Revision Note</button>
+            </div>
+        </section>
+
+        <!-- Technical Integration Notes -->
+        <section class="technical-foundation">
+            <h2 class="section-title">Backend Architecture Integration</h2>
+            <div class="foundation-grid">
+                <article class="foundation-card">
+                    <span class="foundation-label">Stack System</span>
+                    <h3>NodeJS Universal Routing</h3>
+                    <p>The marketplace utilizes JavaScript universally. Shared validation models and JSON schemas unify client browsers with API servers, removing context switching.</p>
+                </article>
+                <article class="foundation-card">
+                    <span class="foundation-label">Asset Offloading</span>
+                    <h3>S3 / Supabase Storage</h3>
+                    <p>Large voice recordings are processed as streams, passing memory straight to cloud S3 containers. The database stores metadata and public URLs, maintaining speed.</p>
+                    <code>backend/storage/audio-demo-storage.js</code>
+                </article>
+                <article class="foundation-card">
+                    <span class="foundation-label">Database Indexing</span>
+                    <h3>Optimized Voice Indexes</h3>
+                    <p>Relational SQL tables enforce compound indexes on high-use filter sets (specialty, tone, accent, turnaround hours, rates) to execute searches under heavy user load.</p>
+                    <code>database/voice-search-indexes.sql</code>
+                </article>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2>Connect with Elite Global Voices Today</h2>
+            <p>Access immediate workspace features: hold project budgets securely, compare audition reads, and negotiate rates.</p>
+            <button class="btn primary-btn" data-auth-trigger><ion-icon name="enter-outline"></ion-icon> Access Casting Workspace</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 SONUM Casting Inc. All rights reserved.</p>
+        <p style="color: var(--text-muted); font-size: 0.75rem;">Premium Studio Marketplace System</p>
+    </footer>
+
+    <!-- Authentication Modal -->
+    <div id="authModal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="auth-modal-title">Join SONUM</h2>
+                <button class="modal-close" aria-label="Close Authentication Modal"><ion-icon name="close-outline"></ion-icon></button>
+            </div>
+
+            <div class="modal-tabs" role="tablist">
+                <button class="tab-btn active" data-tab="signin" role="tab" aria-selected="true">Sign In</button>
+                <button class="tab-btn" data-tab="signup" role="tab" aria-selected="false">Sign Up</button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Sign In Form -->
+                <form id="signInForm" class="form-container active">
+                    <div class="form-group">
+                        <label for="signin-email">Email Address</label>
+                        <input type="email" id="signin-email" placeholder="name@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signin-password">Password</label>
+                        <input type="password" id="signin-password" placeholder="••••••••" required minlength="5">
+                    </div>
+                    <button type="submit" class="form-submit">Access Workspace</button>
+                </form>
+
+                <!-- Sign Up Form -->
+                <form id="signUpForm" class="form-container">
+                    <div class="form-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" placeholder="Alex Reed" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" placeholder="name@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" placeholder="Create password" required minlength="5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-role">Join As</label>
+                        <select id="signup-role" required>
+                            <option value="talent">Voice Actor (Offer Vocal Services)</option>
+                            <option value="client">Client / Hirer (Hire Vocal Talents)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="signup-specialty-group">
+                        <label for="signup-specialty">Vocal Specialty</label>
+                        <select id="signup-specialty" required>
+                            <option value="Commercial & Adverts">Commercial & Adverts</option>
+                            <option value="Animation & Gaming">Animation & Gaming</option>
+                            <option value="Audiobooks & Narration">Audiobooks & Narration</option>
+                            <option value="Documentary Narration">Documentary Narration</option>
+                            <option value="E-Learning & Corporate">E-Learning & Corporate</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="signup-company-group" style="display: none;">
+                        <label for="signup-company">Company / Project Name</label>
+                        <input type="text" id="signup-company" placeholder="Fintech Inc.">
+                    </div>
+                    
+                    <button type="submit" class="form-submit">Register Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,597 @@
+/* Dashboard Page Dark Theme Styling */
+
+.dashboard-main {
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem 8%;
+    background-color: var(--bg-color);
+    gap: 3rem;
+}
+
+/* Welcome Section */
+.welcome-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem;
+    background: linear-gradient(135deg, rgba(22, 25, 38, 0.9) 0%, rgba(7, 8, 11, 0.95) 100%), url('../image/black%20mic-2.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    gap: 2rem;
+    min-height: 220px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+}
+
+.welcome-content {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+
+.dashboard-title {
+    font-family: var(--font-heading);
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+    letter-spacing: -1px;
+}
+
+.welcome-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+}
+
+.welcome-image {
+    width: 140px;
+    height: auto;
+    opacity: 0.85;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.5));
+}
+
+/* Stats Overview Grid */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-card {
+    background: var(--surface-color);
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: left;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-indigo);
+    box-shadow: var(--shadow-hover);
+}
+
+.stat-card h3 {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    margin-bottom: 0.3rem;
+}
+
+.stat-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Client Dashboard Split Grid */
+.client-dashboard-section {
+    margin: 0;
+}
+
+.client-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.dashboard-panel {
+    background: var(--surface-color);
+    border-radius: 8px;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-smooth);
+}
+
+.dashboard-panel:hover {
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.dashboard-panel h3 {
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dashboard-panel h3 ion-icon {
+    color: var(--accent-primary);
+    font-size: 1.3rem;
+}
+
+.project-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.project-row:last-child {
+    border-bottom: 0;
+}
+
+.project-row span {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.project-row strong {
+    font-size: 0.85rem;
+    color: var(--accent-indigo);
+    font-family: var(--font-heading);
+}
+
+.project-row progress {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: var(--border-color);
+    border: none;
+}
+
+.project-row progress::-webkit-progress-bar {
+    background-color: var(--border-color);
+    border-radius: 3px;
+}
+
+.project-row progress::-webkit-progress-value {
+    background: var(--accent-primary);
+    border-radius: 3px;
+}
+
+.compact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    list-style: none;
+}
+
+.compact-list li {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    padding: 0.6rem 0.8rem;
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.compact-list li strong {
+    color: var(--accent-indigo);
+    font-size: 0.8rem;
+}
+
+.billing-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.billing-row:last-child {
+    border-bottom: 0;
+}
+
+.billing-row span {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.billing-row strong {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+}
+
+.release-btn-dock {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Bookings Section */
+.bookings-section {
+    margin: 0;
+}
+
+.bookings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.booking-card {
+    background: var(--surface-color);
+    padding: 1.8rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+}
+
+.booking-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-indigo);
+    box-shadow: var(--shadow-hover);
+}
+
+.booking-status {
+    display: inline-flex;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    width: fit-content;
+    letter-spacing: 0.5px;
+}
+
+.booking-status.pending {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--accent-gold);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.booking-status.confirmed {
+    background-color: rgba(99, 102, 241, 0.1);
+    color: var(--accent-indigo);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.booking-status.completed {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--accent-primary);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.booking-card h4 {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    color: var(--text-primary);
+    margin: 0;
+    font-weight: 700;
+}
+
+.booking-meta {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.booking-type {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin: 0;
+}
+
+.booking-amount {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.booking-card .btn {
+    margin-top: auto;
+    font-size: 0.85rem;
+    padding: 0.6rem 1.2rem;
+}
+
+/* Profile Section */
+.profile-section {
+    background: var(--surface-color);
+    padding: 2.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-soft);
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.profile-header {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.1));
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-soft);
+}
+
+.profile-info h3 {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.2rem 0;
+}
+
+.profile-specialties {
+    color: var(--accent-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin: 0 0 0.8rem 0;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.profile-stats .stat {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.profile-bio,
+.profile-skills {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.8rem;
+}
+
+.profile-spec-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.8rem;
+}
+
+.profile-spec-grid > div {
+    padding: 1.2rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid var(--border-color);
+}
+
+.profile-bio h4,
+.profile-skills h4,
+.profile-spec-grid h4 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin: 0 0 1rem 0;
+    font-weight: 700;
+}
+
+.profile-spec-grid p,
+.profile-bio p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+.skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.skill-tag {
+    background-color: rgba(255,255,255,0.02);
+    color: var(--text-secondary);
+    padding: 0.4rem 0.9rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    border: 1px solid var(--border-color);
+}
+
+.edit-profile-btn {
+    align-self: flex-start;
+    margin-top: 1rem;
+}
+
+/* Quick Actions Section */
+.quick-actions {
+    margin: 0;
+}
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.2rem;
+}
+
+.action-btn {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.8rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.action-btn:hover {
+    background-color: var(--surface-hover);
+    color: var(--text-primary);
+    border-color: var(--accent-primary);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+}
+
+.action-btn .icon {
+    font-size: 1.8rem;
+    color: var(--accent-primary);
+}
+
+.action-btn span:last-child {
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: var(--font-heading);
+}
+
+/* Edit Profile Form Panel Overlay */
+.profile-edit-panel {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2.2rem;
+    box-shadow: var(--shadow-soft);
+    margin-top: 2rem;
+    display: none;
+}
+
+.profile-edit-panel.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+.profile-edit-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.profile-edit-form .form-group-full {
+    grid-column: 1 / -1;
+}
+
+.profile-edit-form .form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* Responsive dashboard definitions */
+@media (max-width: 960px) {
+    .dashboard-main {
+        padding: 2rem 5%;
+        gap: 2rem;
+    }
+
+    .welcome-section {
+        padding: 2rem;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .dashboard-title {
+        font-size: 2rem;
+    }
+
+    .welcome-image {
+        width: 100px;
+    }
+
+    .client-dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .profile-spec-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-stats {
+        justify-content: center;
+    }
+
+    .profile-edit-form {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .stats-section {
+        grid-template-columns: 1fr;
+    }
+
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+
+    .action-btn {
+        padding: 1.2rem 0.5rem;
+    }
+
+    .action-btn .icon {
+        font-size: 1.5rem;
+    }
+
+    .action-btn span:last-child {
+        font-size: 0.8rem;
+    }
+}

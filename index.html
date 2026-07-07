@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonum | Elite Voice Acting Marketplace</title>
+    <meta name="description" content="SONUM — Discover, audition, and hire premier freelance voice actors in a unified, high-performance ecosystem.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="CSS/main-style.css">
+    <link rel="stylesheet" href="CSS/auth-modal.css">
+    <link rel="stylesheet" href="CSS/social-media.css">
+    
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+    <script src="JS/main.js" defer></script>
+    <script src="JS/auth.js" defer></script>
+    <script src="JS/parallax.js" defer></script>
+    <script src="JS/social-media.js" defer></script>
+    <link rel="shortcut icon" href="image/Favicon.png" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="logo" id="headerLogo">
+            <ion-icon name="radio-outline"></ion-icon>SONUM
+        </div>
+        <nav class="nav" aria-label="Main Navigation">
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Categories</a></li>
+                <li><a href="hirers.html">Find Talent</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#" class="btn secondary-btn" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;" data-auth-trigger>Sign In</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="home">
+        <div class="hero-text">
+            <h1 class="main-title">Where the Power of <br><a href="#" class="brand-link">Voice is Maximized</a></h1>
+            <div class="subtitle-container">
+                <p class="subtitle">Discover elite global voice talent for <span class="typing-text"></span></p>
+            </div>
+            
+            <div class="audio-spikes" aria-hidden="true">
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+                <div class="audio-spike"></div>
+            </div>
+            
+            <div class="hero-buttons">
+                <a href="hirers.html" class="btn primary-btn"><ion-icon name="search-outline"></ion-icon> Browse Talent</a>
+                <button class="btn secondary-btn" data-auth-trigger data-auth-mode="signup"><ion-icon name="person-add-outline"></ion-icon> Join Marketplace</button>
+            </div>
+        </div>
+        <div class="hero-image-container">
+            <img src="image/Main Hero Microphone.png" alt="High-End Studio Microphone" class="main-image">
+            <div class="image-backdrop"></div>
+        </div>
+    </main>
+
+    <section id="services" class="page-section" aria-labelledby="categories-heading">
+        <h2 class="section-title" id="categories-heading">Vocal Categories</h2>
+        <div class="grid-container">
+            <div class="card">
+                <div style="font-size: 2.2rem; color: var(--accent-primary); margin-bottom: 1rem;"><ion-icon name="tv-outline"></ion-icon></div>
+                <h4>Commercial & Adverts</h4>
+                <p>Persuasive, engaging, and clear reads tailored specifically to elevate your brand's promotional campaigns.</p>
+            </div>
+            <div class="card">
+                <div style="font-size: 2.2rem; color: var(--accent-indigo); margin-bottom: 1rem;"><ion-icon name="game-controller-outline"></ion-icon></div>
+                <h4>Animation & Gaming</h4>
+                <p>Immersive character acting, wide vocal range, and expressive dialogue for animations and video games.</p>
+            </div>
+            <div class="card">
+                <div style="font-size: 2.2rem; color: var(--accent-gold); margin-bottom: 1rem;"><ion-icon name="book-outline"></ion-icon></div>
+                <h4>Audiobooks & Narration</h4>
+                <p>Consistent, warm narrative tones that capture listeners' attention and sustain long-form story arcs.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Strongholds -->
+    <section id="strongholds" class="page-section bg-alternate" aria-labelledby="strongholds-heading">
+        <h2 class="section-title" id="strongholds-heading">Marketplace Strongholds</h2>
+        <div class="grid-container">
+            <div class="card stronghold-card">
+                <div class="stronghold-badge">01</div>
+                <h4>High-Performance Architecture</h4>
+                <p>Built with lightweight components, zero layout shifts, and statically cached reels for instantaneous previews.</p>
+            </div>
+            <div class="card stronghold-card">
+                <div class="stronghold-badge">02</div>
+                <h4>Minimalist Design Discipline</h4>
+                <p>A high-contrast neutral theme that focuses visual attention strictly on vocal performance metrics and content.</p>
+            </div>
+            <div class="card stronghold-card">
+                <div class="stronghold-badge">03</div>
+                <h4>Secure Escrow Workflows</h4>
+                <p>Bridges elite talent with major studio hirers safely by holding project milestones in escrow until final approval.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countermeasures & Solutions -->
+    <section id="solutions" class="page-section" aria-labelledby="solutions-heading">
+        <h2 class="section-title" id="solutions-heading">Casting Solutions</h2>
+        <div class="solutions-matrix">
+            <div class="matrix-row header-row">
+                <div class="matrix-cell">Common Marketplace Bottleneck</div>
+                <div class="matrix-cell">The SONUM Countermeasure</div>
+            </div>
+            
+            <div class="matrix-row">
+                <div class="matrix-cell pain-point">
+                    <strong>Fragmented Demo Auditions</strong>
+                    <p>Hirers waste hours digging through broken external links or inconsistent third-party media players.</p>
+                </div>
+                <div class="matrix-cell solution-point">
+                    <strong>Unified Playback Dock</strong>
+                    <p>Instant audio reel streaming with precise scrubber timeline controls straight from the browse catalog grids.</p>
+                </div>
+            </div>
+
+            <div class="matrix-row">
+                <div class="matrix-cell pain-point">
+                    <strong>Manual Tracking & Disputed Milestones</strong>
+                    <p>Freelancers logging studio sessions manually with zero security regarding rate payout cycles.</p>
+                </div>
+                <div class="matrix-cell solution-point">
+                    <strong>Relational Escrow System</strong>
+                    <p>Automated checkout steppers that secure project budget instantly upon contract agreement, auto-releasing on approval.</p>
+                </div>
+            </div>
+
+            <div class="matrix-row">
+                <div class="matrix-cell pain-point">
+                    <strong>Ambiguous Vocal Filtering</strong>
+                    <p>Basic text fields that fail to accurately index complex features like tone, accent, age range, and studio gear.</p>
+                </div>
+                <div class="matrix-cell solution-point">
+                    <strong>Multi-Tag Search Matrix</strong>
+                    <p>Relational SQL tags indexing vocal qualities for precise, instantaneous match results under heavy traffic.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="page-section bg-alternate" aria-labelledby="portfolio-heading">
+        <h2 class="section-title" id="portfolio-heading">Featured Voices</h2>
+        <div class="grid-container">
+            <div class="talent-card">
+                <div class="talent-avatar" style="background-image: url('image/Alex Carter.jpg'); background-size: cover; background-position: center;"></div>
+                <div class="talent-info">
+                    <h4>Alex Carter</h4>
+                    <p>Baritone | Cinematic, Gritty, Corporate</p>
+                    <a href="hirers.html" class="play-btn"><ion-icon name="volume-high-outline"></ion-icon> Listen in Hub</a>
+                </div>
+            </div>
+            <div class="talent-card">
+                <div class="talent-avatar" style="background-image: url('image/Seraph Jenkins.jpg'); background-size: cover; background-position: center;"></div>
+                <div class="talent-info">
+                    <h4>Sarah Jenkins</h4>
+                    <p>Alto | Energetic Commercial, Bright</p>
+                    <a href="hirers.html" class="play-btn"><ion-icon name="volume-high-outline"></ion-icon> Listen in Hub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="page-section" aria-labelledby="contact-heading">
+        <h2 class="section-title" id="contact-heading">Get In Touch</h2>
+        <form class="contact-form">
+            <input type="text" placeholder="Your Name" aria-label="Your Name" required>
+            <input type="email" placeholder="Your Email" aria-label="Your Email" required>
+            <textarea rows="4" placeholder="Tell us about your casting requirements..." aria-label="Casting Requirements" required></textarea>
+            <button type="submit" class="btn primary-btn"><ion-icon name="mail-outline"></ion-icon> Send Message</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 SONUM Casting Inc. All rights reserved.</p>
+        <p style="color: var(--text-muted); font-size: 0.75rem;">Premium Studio Marketplace System</p>
+    </footer>
+
+    <!-- Social Media Trigger Button -->
+    <button id="socialMediaButton" class="social-media-button" title="Connect with us on social media">
+        <ion-icon name="share-social-outline"></ion-icon>
+    </button>
+
+    <!-- Social Media Modal -->
+    <div id="socialModal" role="dialog" aria-modal="true" aria-labelledby="social-modal-title">
+        <div class="social-modal-content">
+            <button class="social-modal-close" aria-label="Close social modal"><ion-icon name="close-outline"></ion-icon></button>
+            <div class="social-modal-header">
+                <h2 class="social-modal-title" id="social-modal-title">Connect With Us</h2>
+                <p class="social-modal-subtitle">Join the global SONUM voice network</p>
+            </div>
+
+            <div class="social-message">
+                <p>Stay updated on the latest talent acquisitions, platform upgrades, voice-over casting calls, and studio technology insights.</p>
+            </div>
+
+            <div class="social-links-grid">
+                <a href="#" class="social-link" data-platform="twitter" data-handle="SonumVoices">
+                    <ion-icon name="logo-twitter"></ion-icon>
+                    <span class="social-link-name">X (Twitter)</span>
+                    <span class="social-link-handle">@SonumVoices</span>
+                </a>
+                <a href="#" class="social-link" data-platform="instagram" data-handle="SonumVoices">
+                    <ion-icon name="logo-instagram"></ion-icon>
+                    <span class="social-link-name">Instagram</span>
+                    <span class="social-link-handle">@SonumVoices</span>
+                </a>
+                <a href="#" class="social-link" data-platform="facebook" data-handle="SonumCasting">
+                    <ion-icon name="logo-facebook"></ion-icon>
+                    <span class="social-link-name">Facebook</span>
+                    <span class="social-link-handle">SonumCasting</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authentication Modal -->
+    <div id="authModal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="auth-modal-title">Join SONUM</h2>
+                <button class="modal-close" aria-label="Close Authentication Modal"><ion-icon name="close-outline"></ion-icon></button>
+            </div>
+
+            <div class="modal-tabs" role="tablist">
+                <button class="tab-btn active" data-tab="signin" role="tab" aria-selected="true">Sign In</button>
+                <button class="tab-btn" data-tab="signup" role="tab" aria-selected="false">Sign Up</button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Sign In Form -->
+                <form id="signInForm" class="form-container active">
+                    <div class="form-group">
+                        <label for="signin-email">Email Address</label>
+                        <input type="email" id="signin-email" placeholder="name@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signin-password">Password</label>
+                        <input type="password" id="signin-password" placeholder="••••••••" required minlength="5">
+                    </div>
+                    <button type="submit" class="form-submit">Access Workspace</button>
+                </form>
+
+                <!-- Sign Up Form -->
+                <form id="signUpForm" class="form-container">
+                    <div class="form-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" placeholder="Alex Reed" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" placeholder="name@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" placeholder="Create password" required minlength="5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-role">Join As</label>
+                        <select id="signup-role" required>
+                            <option value="talent">Voice Actor (Offer Vocal Services)</option>
+                            <option value="client">Client / Hirer (Hire Vocal Talents)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="signup-specialty-group">
+                        <label for="signup-specialty">Vocal Specialty</label>
+                        <select id="signup-specialty" required>
+                            <option value="Commercial & Adverts">Commercial & Adverts</option>
+                            <option value="Animation & Gaming">Animation & Gaming</option>
+                            <option value="Audiobooks & Narration">Audiobooks & Narration</option>
+                            <option value="Documentary Narration">Documentary Narration</option>
+                            <option value="E-Learning & Corporate">E-Learning & Corporate</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="signup-company-group" style="display: none;">
+                        <label for="signup-company">Company / Project Name</label>
+                        <input type="text" id="signup-company" placeholder="Fintech Inc.">
+                    </div>
+                    
+                    <button type="submit" class="form-submit">Register Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

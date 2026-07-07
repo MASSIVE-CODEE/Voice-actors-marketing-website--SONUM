@@ -1,0 +1,140 @@
+-- ============================================================================
+-- SONUM RELATIONAL DATABASE SCHEMA & SEARCH INDEX MIGRATION
+-- Target Database: PostgreSQL / Supabase Relational Engine
+-- ============================================================================
+
+-- Enable GIN indexes support for fast full-text match queries
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
+-- 1. Users Account Table
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    full_name VARCHAR(255) NOT NULL,
+    user_role VARCHAR(50) NOT NULL CHECK (user_role IN ('client', 'talent')),
+    company_name VARCHAR(255),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Talent Vocal Profiles Table
+CREATE TABLE IF NOT EXISTS talent_profiles (
+    user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    gender VARCHAR(50) NOT NULL,
+    primary_language VARCHAR(100) NOT NULL,
+    accent VARCHAR(100) NOT NULL,
+    vocal_style VARCHAR(100) NOT NULL,
+    tone VARCHAR(255) NOT NULL,
+    sounding_age VARCHAR(50) NOT NULL,
+    turnaround_hours INT DEFAULT 24,
+    hourly_rate DECIMAL(10, 2) NOT NULL,
+    bio TEXT,
+    microphone VARCHAR(255),
+    audio_interface VARCHAR(255),
+    room_treatment VARCHAR(255),
+    rating DECIMAL(3, 2) DEFAULT 5.00,
+    reviews_count INT DEFAULT 0,
+    projects_count INT DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Dynamic Voice Tags Lookup Table
+CREATE TABLE IF NOT EXISTS talent_tags (
+    tag_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    tag_name VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- 4. Voice Tags Mapping Table
+CREATE TABLE IF NOT EXISTS talent_profile_tags (
+    talent_id UUID REFERENCES talent_profiles(user_id) ON DELETE CASCADE,
+    tag_id INT REFERENCES talent_tags(tag_id) ON DELETE CASCADE,
+    PRIMARY KEY (talent_id, tag_id)
+);
+
+-- 5. Offloaded Cloud Audio Demo Reels Table
+CREATE TABLE IF NOT EXISTS talent_demo_reels (
+    reel_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    talent_id UUID REFERENCES talent_profiles(user_id) ON DELETE CASCADE,
+    category VARCHAR(100) NOT NULL,
+    storage_key VARCHAR(512) NOT NULL,
+    audio_url VARCHAR(1024) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 6. Detailed Job Postings Table
+CREATE TABLE IF NOT EXISTS job_postings (
+    job_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    client_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    word_count INT NOT NULL,
+    usage_rights VARCHAR(255) NOT NULL,
+    budget_range VARCHAR(100) NOT NULL,
+    script_url VARCHAR(1024),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 7. Casting Bookings Table
+CREATE TABLE IF NOT EXISTS bookings (
+    booking_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    job_id UUID REFERENCES job_postings(job_id) ON DELETE SET NULL,
+    talent_id UUID REFERENCES talent_profiles(user_id) ON DELETE CASCADE,
+    status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'review', 'completed')),
+    amount DECIMAL(10, 2) NOT NULL,
+    deadline DATE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 8. Secure Escrow Transactions Table
+CREATE TABLE IF NOT EXISTS escrow_transactions (
+    transaction_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    booking_id UUID REFERENCES bookings(booking_id) ON DELETE CASCADE,
+    amount DECIMAL(10, 2) NOT NULL,
+    status VARCHAR(50) DEFAULT 'held' CHECK (status IN ('held', 'released', 'refunded')),
+    funded_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    released_at TIMESTAMP WITH TIME ZONE
+);
+
+-- 9. Audition Submissions Panel Table
+CREATE TABLE IF NOT EXISTS audition_submissions (
+    audition_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    job_id UUID REFERENCES job_postings(job_id) ON DELETE CASCADE,
+    talent_id UUID REFERENCES talent_profiles(user_id) ON DELETE CASCADE,
+    file_url VARCHAR(1024) NOT NULL,
+    rate_quote DECIMAL(10, 2) NOT NULL,
+    delivery_hours INT NOT NULL,
+    revision_notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================================================
+-- DATABASE OPTIMIZATION & INDEXES
+-- Ensures compound queries and tags lookup operations execute instantly.
+-- ============================================================================
+
+-- Explicit Indexing on Vocal Filters: Gender, Language, Accent, Style
+CREATE INDEX IF NOT EXISTS idx_talent_profiles_voice_filters
+ON talent_profiles (gender, primary_language, accent, vocal_style);
+
+-- Indexing turnaround times and rate brackets for filter ranges
+CREATE INDEX IF NOT EXISTS idx_talent_profiles_turnaround_rate
+ON talent_profiles (turnaround_hours, hourly_rate);
+
+-- Indexing for usage rights query parameters
+CREATE INDEX IF NOT EXISTS idx_talent_profiles_usage_rights
+ON talent_profiles (turnaround_hours);
+
+-- Indexing for demo reels tags lookup
+CREATE INDEX IF NOT EXISTS idx_talent_demo_reels_category
+ON talent_demo_reels (talent_id, category);
+
+-- GIN Index on combined columns for high-performance free-text voice descriptor searches
+CREATE INDEX IF NOT EXISTS idx_talent_profiles_trgm_search
+ON talent_profiles USING gin (
+    (primary_language || ' ' || accent || ' ' || vocal_style || ' ' || tone) gin_trgm_ops
+);
+
+-- Indexing mapping tables for fast relational tag lookups
+CREATE INDEX IF NOT EXISTS idx_profile_tags_talent ON talent_profile_tags (talent_id);
+CREATE INDEX IF NOT EXISTS idx_profile_tags_tag ON talent_profile_tags (tag_id);
+CREATE INDEX IF NOT EXISTS idx_bookings_talent_status ON bookings (talent_id, status);
+CREATE INDEX IF NOT EXISTS idx_escrow_booking ON escrow_transactions (booking_id);

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace Dashboard | SONUM</title>
+    <meta name="description" content="Manage your casting projects, vocal profiles, bookings, and escrow releases in the SONUM workspace.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="CSS/main-style.css">
+    <link rel="stylesheet" href="CSS/dashboard-style.css">
+    <link rel="stylesheet" href="CSS/auth-modal.css">
+    <link rel="stylesheet" href="CSS/social-media.css">
+    
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+    <script src="JS/main.js" defer></script>
+    <script src="JS/auth.js" defer></script>
+    <script src="JS/dashboard.js" defer></script>
+    <script src="JS/parallax.js" defer></script>
+    <script src="JS/social-media.js" defer></script>
+    <link rel="shortcut icon" href="image/Favicon.png" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="logo" id="headerLogo">
+            <ion-icon name="radio-outline"></ion-icon>SONUM
+        </div>
+        <nav class="nav" aria-label="Dashboard Navigation">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="hirers.html">Find Talent</a></li>
+                <li><a href="#dashboard" class="active">Workspace</a></li>
+                <li><button id="workspaceToggleBtn" class="btn secondary-btn" style="padding: 0.4rem 1rem; font-size: 0.8rem; border-color: var(--accent-indigo); color: var(--accent-indigo);"><ion-icon name="swap-horizontal-outline"></ion-icon> Switch Workspace</button></li>
+                <li><button id="logoutBtn" class="btn secondary-btn" style="padding: 0.4rem 1rem; font-size: 0.8rem; border-color: #ef4444; color: #ef4444;"><ion-icon name="log-out-outline"></ion-icon> Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="dashboard" class="dashboard-main">
+        <!-- Welcome banner -->
+        <section class="welcome-section">
+            <div class="welcome-content">
+                <span class="player-kicker" id="workspaceRoleLabel">Voice Actor Workspace</span>
+                <h1 class="dashboard-title" id="welcomeTitle">Welcome back, Voice Actor!</h1>
+                <p class="welcome-subtitle" id="welcomeSubtitle">Your next opportunity awaits</p>
+            </div>
+            <img src="image/Main Hero Microphone.png" alt="Microphone Banner" class="welcome-image">
+        </section>
+
+        <!-- Dynamic Role Contexts wrapper -->
+        <div id="roleContextWrapper">
+            
+            <!-- Voice Actor Workspace (Stats + Bookings + Profile) -->
+            <div id="talentWorkspaceSection" style="display: block;">
+                
+                <!-- Stats Grid -->
+                <section class="stats-section">
+                    <div class="stat-card">
+                        <h3><ion-icon name="mic-outline"></ion-icon> <span id="statProjects">12</span></h3>
+                        <p>Active Projects</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3><ion-icon name="time-outline"></ion-icon> <span id="statHours">48</span></h3>
+                        <p>Hours Recorded</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3><ion-icon name="wallet-outline"></ion-icon> <span id="statEarnings">$3,250</span></h3>
+                        <p>Total Earnings</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3><ion-icon name="star-outline"></ion-icon> <span id="statRating">4.8</span></h3>
+                        <p>Average Rating</p>
+                    </div>
+                </section>
+
+                <!-- Bookings Lists -->
+                <section class="bookings-section">
+                    <h2 class="section-title">Studio Booking Requests</h2>
+                    <div class="bookings-grid" id="bookingsGrid">
+                        <!-- Bookings populate dynamically -->
+                        <div class="booking-card" data-booking-id="b1">
+                            <div class="booking-status pending">Pending Review</div>
+                            <h4>Commercial Spot - Energy Drink</h4>
+                            <p class="booking-meta">Deadline: June 20, 2026</p>
+                            <p class="booking-type">Category: Commercial & Adverts</p>
+                            <div class="booking-amount">$250</div>
+                            <div style="display:flex; gap: 0.5rem; margin-top: auto;">
+                                <button class="btn primary-btn booking-accept-btn" style="flex:1; padding: 0.5rem;"><ion-icon name="checkmark-outline"></ion-icon> Accept</button>
+                                <button class="btn secondary-btn booking-reject-btn" style="flex:1; padding: 0.5rem;"><ion-icon name="close-outline"></ion-icon> Reject</button>
+                            </div>
+                        </div>
+
+                        <div class="booking-card" data-booking-id="b2">
+                            <div class="booking-status confirmed">Confirmed</div>
+                            <h4>Podcast Narration - Tech Trends</h4>
+                            <p class="booking-meta">Due: June 25, 2026</p>
+                            <p class="booking-type">Category: Audiobooks & Narration</p>
+                            <div class="booking-amount">$400</div>
+                            <button class="btn secondary-btn booking-submit-btn" style="margin-top: auto;"><ion-icon name="cloud-upload-outline"></ion-icon> Submit Audio Files</button>
+                        </div>
+
+                        <div class="booking-card" data-booking-id="b3">
+                            <div class="booking-status completed">Completed</div>
+                            <h4>Video Game NPC - Fantasy RPG</h4>
+                            <p class="booking-meta">Payout Released: June 12, 2026</p>
+                            <p class="booking-type">Category: Animation & Gaming</p>
+                            <div class="booking-amount">$600</div>
+                            <button class="btn secondary-btn" style="margin-top: auto;"><ion-icon name="document-text-outline"></ion-icon> View Invoice</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Profile Management Showcase -->
+                <section id="profile" class="profile-section">
+                    <h2 class="section-title">Your Public Profile</h2>
+                    <div class="profile-container">
+                        <div class="profile-header">
+                            <div class="profile-avatar" style="background-image: url('image/Jessica Wong.jpg'); background-size: cover; background-position: center;"></div>
+                            <div class="profile-info">
+                                <h3 id="profileName">Voice Actor Name</h3>
+                                <p class="profile-specialties" id="profileSpecialty">Vocal Specialty</p>
+                                <div class="profile-stats">
+                                    <span class="stat"><ion-icon name="star" style="color: var(--accent-gold);"></ion-icon> <span id="profileRating">4.9</span> Rating</span>
+                                    <span class="stat"><ion-icon name="ribbon-outline"></ion-icon> <span id="profileReviews">12</span> Reviews</span>
+                                    <span class="stat"><ion-icon name="pulse-outline"></ion-icon> <span id="profileProjects">5</span> Active Projects</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-bio">
+                            <h4>About Your Voice</h4>
+                            <p id="profileBio">Welcome to SONUM! Your vocal description and studio setups will render here.</p>
+                        </div>
+
+                        <div class="profile-spec-grid">
+                            <div>
+                                <h4>Vocal Attributes</h4>
+                                <p><strong>Sound sound:</strong> <span id="profileAttrAge">25-45</span></p>
+                                <p><strong>Tone:</strong> <span id="profileAttrTone">Warm, corporate, conversational</span></p>
+                                <p><strong>Accent:</strong> <span id="profileAttrAccent">Neutral American</span></p>
+                                <p><strong>Languages:</strong> <span id="profileAttrLang">English, Spanish</span></p>
+                            </div>
+                            <div>
+                                <h4>Studio Equipment</h4>
+                                <p><strong>Microphone:</strong> <span id="profileEquipMic">Neumann TLM 103</span></p>
+                                <p><strong>Interface:</strong> <span id="profileEquipInterface">Apollo Twin Duo</span></p>
+                                <p><strong>Room:</strong> <span id="profileEquipRoom">Treated Vocal Booth</span></p>
+                                <p><strong>Connection:</strong> Source-Connect Ready</p>
+                            </div>
+                            <div>
+                                <h4>Turnaround & Files</h4>
+                                <p><strong>Standard turnaround:</strong> <span id="profileTurnaround">24 hours</span></p>
+                                <p><strong>Rush files:</strong> Same-day available</p>
+                                <div class="skills-grid" style="margin-top: 1rem;">
+                                    <span class="skill-tag">Commercial Reel</span>
+                                    <span class="skill-tag">Narration Reel</span>
+                                    <span class="skill-tag">Game Demo</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn primary-btn edit-profile-btn" id="editProfileBtn"><ion-icon name="create-outline"></ion-icon> Edit Studio Profile</button>
+                    </div>
+
+                    <!-- Edit Profile Overlay Form -->
+                    <div class="profile-edit-panel" id="profileEditPanel">
+                        <h3>Edit Studio Profile</h3>
+                        <form class="profile-edit-form" id="profileEditForm">
+                            <div class="form-group">
+                                <label for="edit-name">Display Name</label>
+                                <input type="text" id="edit-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-specialty">Casting Specialty</label>
+                                <select id="edit-specialty" required>
+                                    <option value="Commercial & Adverts">Commercial & Adverts</option>
+                                    <option value="Animation & Gaming">Animation & Gaming</option>
+                                    <option value="Audiobooks & Narration">Audiobooks & Narration</option>
+                                    <option value="Documentary Narration">Documentary Narration</option>
+                                    <option value="E-Learning & Corporate">E-Learning & Corporate</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-rate">Hourly Booking Rate ($/hr)</label>
+                                <input type="number" id="edit-rate" min="10" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-turnaround">Turnaround Time</label>
+                                <input type="text" id="edit-turnaround" placeholder="e.g. 24 hours" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-age">Sounding Age Sound</label>
+                                <input type="text" id="edit-age" placeholder="e.g. 25-45" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-accent">Vocal Accent</label>
+                                <input type="text" id="edit-accent" placeholder="e.g. Neutral British" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-tone">Vocal Tone Style</label>
+                                <input type="text" id="edit-tone" placeholder="e.g. Energetic, Friendly, Warm" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-lang">Languages</label>
+                                <input type="text" id="edit-lang" placeholder="e.g. English, French" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-mic">Microphone</label>
+                                <input type="text" id="edit-mic" placeholder="e.g. Neumann TLM 103" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-interface">Audio Interface</label>
+                                <input type="text" id="edit-interface" placeholder="e.g. Apollo Twin Duo" required>
+                            </div>
+                            <div class="form-group-full form-group">
+                                <label for="edit-bio">Profile Bio / Description</label>
+                                <textarea id="edit-bio" rows="4" required></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn secondary-btn" type="button" id="cancelEditProfileBtn">Cancel</button>
+                                <button class="btn primary-btn" type="submit">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Quick Actions Grid -->
+                <section class="quick-actions">
+                    <h2 class="section-title">Actor Toolkit</h2>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="uploadDemoActionBtn">
+                            <span class="icon"><ion-icon name="cloud-upload-outline"></ion-icon></span>
+                            <span>Upload Cloud Demo</span>
+                        </button>
+                        <button class="action-btn" onclick="alert('Workspace Chat: No new messages.');">
+                            <span class="icon"><ion-icon name="chatbox-ellipses-outline"></ion-icon></span>
+                            <span>Messages (0 New)</span>
+                        </button>
+                        <button class="action-btn" onclick="alert('Withdraw request placed. Funds clear in 48 hours.');">
+                            <span class="icon"><ion-icon name="cash-outline"></ion-icon></span>
+                            <span>Withdraw Earnings</span>
+                        </button>
+                        <button class="action-btn" onclick="alert('Performance Analytics: 98% Profile Match Rating.');">
+                            <span class="icon"><ion-icon name="bar-chart-outline"></ion-icon></span>
+                            <span>View Analytics</span>
+                        </button>
+                        <button class="action-btn" onclick="alert('Casting Settings panel updated.');">
+                            <span class="icon"><ion-icon name="options-outline"></ion-icon></span>
+                            <span>Casting Settings</span>
+                        </button>
+                        <button class="action-btn" onclick="alert('Support ticket created.');">
+                            <span class="icon"><ion-icon name="help-circle-outline"></ion-icon></span>
+                            <span>Help & Support</span>
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Client / Hirer Workspace (Project Tracking + Saved Talent + Billing) -->
+            <div id="clientWorkspaceSection" style="display: none;">
+                <div class="client-dashboard-grid">
+                    
+                    <!-- Project Tracking Panel -->
+                    <div class="dashboard-panel">
+                        <h3><ion-icon name="pulse-outline"></ion-icon> Active Project Tracking</h3>
+                        <div id="clientActiveProjectsList">
+                            <div class="project-row">
+                                <span>Global fintech launch film</span>
+                                <strong>Recording Audition Stage</strong>
+                                <progress value="68" max="100"></progress>
+                            </div>
+                            <div class="project-row">
+                                <span>Internal training module</span>
+                                <strong>Pending Audition Submissions</strong>
+                                <progress value="35" max="100"></progress>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Saved Roster Panel -->
+                    <div class="dashboard-panel">
+                        <h3><ion-icon name="people-outline"></ion-icon> Saved Talent Roster</h3>
+                        <ul id="savedRosterList" class="compact-list">
+                            <li><ion-icon name="person-outline"></ion-icon> Alex Carter · Baritone (Cinematic)</li>
+                            <li><ion-icon name="person-outline"></ion-icon> Jessica Wong · Soprano (Conversational)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Communication Logs Panel -->
+                    <div class="dashboard-panel">
+                        <h3><ion-icon name="chatbubbles-outline"></ion-icon> Communication Logs</h3>
+                        <ul class="compact-list" id="communicationLogsList">
+                            <li><strong>09:40</strong> Project "fintech" broadcasted to matching tags</li>
+                            <li><strong>11:15</strong> Alex Carter submitted audition read files</li>
+                            <li><strong>14:05</strong> Revision note saved: "soften the brand name"</li>
+                        </ul>
+                    </div>
+
+                    <!-- Automated Billing Escrow Panel -->
+                    <div class="dashboard-panel">
+                        <h3><ion-icon name="receipt-outline"></ion-icon> Automated Billing / Invoice</h3>
+                        <div class="billing-row">
+                            <span>Escrow Held Balance</span>
+                            <strong id="billingEscrowHeld">$1,000</strong>
+                        </div>
+                        <div class="billing-row">
+                            <span>Platform fee (8%)</span>
+                            <strong id="billingPlatformFee">$80</strong>
+                        </div>
+                        <div class="billing-row">
+                            <span>Next Release Trigger</span>
+                            <strong>On Client Final Approval</strong>
+                        </div>
+                        <div class="release-btn-dock">
+                            <button id="releaseEscrowBtn" class="btn primary-btn" style="padding: 0.6rem 1.5rem; font-size: 0.85rem;"><ion-icon name="lock-open-outline"></ion-icon> Release Escrow Funds</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 SONUM Casting Inc. All rights reserved.</p>
+        <p style="color: var(--text-muted); font-size: 0.75rem;">Premium Studio Marketplace System</p>
+    </footer>
+
+    <!-- Cloud Upload Demo Modal placeholder -->
+    <div id="demoUploadModal" class="social-modal-content" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2100; max-width: 450px; width: 90%; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: var(--shadow-hover); padding: 2rem;">
+        <button class="social-modal-close" id="closeDemoModalBtn" style="position: absolute; top:15px; right:15px; background:none; border:none; color:var(--text-secondary); cursor:pointer;"><ion-icon name="close-outline"></ion-icon></button>
+        <h3 style="margin-bottom:1.5rem; font-family:var(--font-heading); color:var(--text-primary);">Upload Cloud Demo Reel</h3>
+        <form id="demoUploadForm" style="display:flex; flex-direction:column; gap:1.2rem;">
+            <div class="form-group">
+                <label for="demo-category">Reel Category</label>
+                <select id="demo-category" required style="width:100%; padding:0.75rem; background:var(--bg-color); color:var(--text-primary); border:1px solid var(--border-color); border-radius:6px;">
+                    <option value="commercial">Commercial & Adverts</option>
+                    <option value="narration">Audiobooks & Narration</option>
+                    <option value="gaming">Animation & Gaming</option>
+                    <option value="corporate">E-Learning & Corporate</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="demo-file">Audio File (.mp3, .wav)</label>
+                <input type="file" id="demo-file" accept=".mp3,.wav" required style="width:100%; padding:0.75rem; background:var(--bg-color); color:var(--text-primary); border:1px solid var(--border-color); border-radius:6px;">
+            </div>
+            <button type="submit" class="btn primary-btn" style="width:100%;"><ion-icon name="cloud-upload-outline"></ion-icon> Upload to Cloud Bucket</button>
+        </form>
+    </div>
+    
+    <!-- Modal overlay backdrop for demo upload -->
+    <div id="demoModalOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2050; backdrop-filter:blur(6px);"></div>
+
+</body>
+</html>
