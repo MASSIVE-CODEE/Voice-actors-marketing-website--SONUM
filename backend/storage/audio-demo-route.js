@@ -1,27 +1,30 @@
 const express = require('express');
-const multer = require('multer');
-const { uploadDemoReelToS3 } = require('./audio-demo-storage');
+const { createPresignedUploadSession } = require('./audio-demo-storage');
 
 const router = express.Router();
-const upload = multer({
-    storage: multer.memoryStorage(),
-    limits: {
-        fileSize: 50 * 1024 * 1024
-    }
-});
 
-router.post('/talent/:talentId/demo-reels', upload.single('demoReel'), async (request, response, next) => {
+router.post('/talent/:talentId/demo-reels', async (request, response, next) => {
     try {
-        const uploadedDemo = await uploadDemoReelToS3({
-            file: request.file,
+        const { filename, mimeType, category } = request.body || {};
+        if (!filename) {
+            return response.status(400).json({ error: 'filename is required to create an upload session' });
+        }
+
+        const uploadSession = createPresignedUploadSession({
             talentId: request.params.talentId,
-            category: request.body.category
+            category,
+            filename,
+            mimeType
         });
 
         response.status(201).json({
-            demoCategory: request.body.category || 'general',
-            storageKey: uploadedDemo.key,
-            audioUrl: uploadedDemo.url
+            demoCategory: category || 'general',
+            storageKey: uploadSession.key,
+            audioUrl: uploadSession.uploadUrl,
+            uploadMode: uploadSession.uploadMode,
+            method: uploadSession.method,
+            headers: uploadSession.headers,
+            expiresAt: uploadSession.expiresAt
         });
     } catch (error) {
         next(error);

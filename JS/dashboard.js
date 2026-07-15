@@ -1,19 +1,39 @@
 // SONUM - Dashboard Controller
 // Manages dual workspace roles, project updates, bookings accepted/rejected, and escrow payouts
 
+let dashboardControllers = null;
+
+function createDashboardControllers() {
+    if (dashboardControllers) return dashboardControllers;
+
+    const state = {
+        sessionUser: null,
+        escapeHandler: null,
+        modalCloseHandler: null,
+        keydownHandler: null
+    };
+
+    const init = () => {
+        state.sessionUser = JSON.parse(localStorage.getItem('sonumCurrentUser') || 'null');
+        initDashboardSystem(state);
+        initWorkspaceSwitchBtn(state);
+        initLogoutHandler(state);
+        initProfileEditor(state);
+        initBookingActions(state);
+        initDemoUploadModal(state);
+    };
+
+    dashboardControllers = { state, init };
+    return dashboardControllers;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    initDashboardSystem();
-    initWorkspaceSwitchBtn();
-    initLogoutHandler();
-    initProfileEditor();
-    initBookingActions();
-    initDemoUploadModal();
+    createDashboardControllers().init();
 });
 
-let sessionUser = null;
-
-function initDashboardSystem() {
-    sessionUser = JSON.parse(localStorage.getItem('sonumCurrentUser'));
+function initDashboardSystem(state) {
+    state.sessionUser = JSON.parse(localStorage.getItem('sonumCurrentUser') || 'null');
+    sessionUser = state.sessionUser;
     
     if (!sessionUser) {
         window.location.href = 'index.html';
@@ -49,49 +69,55 @@ function initDashboardSystem() {
         localStorage.setItem('sonumBookings', JSON.stringify(defaultBookings));
     }
 
-    renderWorkspaceLayout();
+    renderWorkspaceLayout(state);
 }
 
 // Workspace Swapper: Switch perspectives dynamically for manual review
-function initWorkspaceSwitchBtn() {
+function initWorkspaceSwitchBtn(state) {
     const toggleBtn = document.getElementById('workspaceToggleBtn');
     if (!toggleBtn) return;
 
     toggleBtn.addEventListener('click', () => {
-        const nextRole = sessionUser.userRole === 'client' ? 'talent' : 'client';
-        sessionUser.userRole = nextRole;
-        localStorage.setItem('sonumCurrentUser', JSON.stringify(sessionUser));
+        const nextRole = state.sessionUser.userRole === 'client' ? 'talent' : 'client';
+        state.sessionUser.userRole = nextRole;
+        localStorage.setItem('sonumCurrentUser', JSON.stringify(state.sessionUser));
         
-        // Update user state database
         const users = JSON.parse(localStorage.getItem('sonumUsers') || '{}');
-        if (users[sessionUser.email]) {
-            users[sessionUser.email].userRole = nextRole;
+        if (users[state.sessionUser.email]) {
+            users[state.sessionUser.email].userRole = nextRole;
             localStorage.setItem('sonumUsers', JSON.stringify(users));
         }
 
-        renderWorkspaceLayout();
+        renderWorkspaceLayout(state);
         showFeedbackToast(`Switched to ${nextRole === 'client' ? 'Client' : 'Voice Actor'} Workspace.`, "success");
     });
 }
 
-function renderWorkspaceLayout() {
-    const isClient = sessionUser.userRole === 'client';
-    
-    // Label updates
-    document.getElementById('workspaceRoleLabel').textContent = isClient ? "Client / Hirer Workspace" : "Voice Actor Workspace";
-    document.getElementById('welcomeTitle').textContent = `Welcome back, ${sessionUser.fullName}!`;
-    document.getElementById('welcomeSubtitle').textContent = isClient 
-        ? `Oversee your active castings and escrow payouts.` 
-        : `You have earned $${(sessionUser.earnings || 0).toLocaleString()} this month`;
+function renderWorkspaceLayout(state) {
+    if (!state || !state.sessionUser) {
+        return;
+    }
 
-    // View panels toggling
-    document.getElementById('talentWorkspaceSection').style.display = isClient ? 'none' : 'block';
-    document.getElementById('clientWorkspaceSection').style.display = isClient ? 'block' : 'none';
+    const isClient = state.sessionUser?.userRole === 'client';
+    const workspaceRoleLabel = document.getElementById('workspaceRoleLabel');
+    const welcomeTitle = document.getElementById('welcomeTitle');
+    const welcomeSubtitle = document.getElementById('welcomeSubtitle');
+    const talentWorkspaceSection = document.getElementById('talentWorkspaceSection');
+    const clientWorkspaceSection = document.getElementById('clientWorkspaceSection');
+
+    if (workspaceRoleLabel) workspaceRoleLabel.textContent = isClient ? "Client / Hirer Workspace" : "Voice Actor Workspace";
+    if (welcomeTitle) welcomeTitle.textContent = `Welcome back, ${state.sessionUser?.fullName || 'User'}!`;
+    if (welcomeSubtitle) welcomeSubtitle.textContent = isClient
+        ? `Oversee your active castings and escrow payouts.`
+        : `You have earned $${((state.sessionUser?.earnings || 0)).toLocaleString()} this month`;
+
+    if (talentWorkspaceSection) talentWorkspaceSection.style.display = isClient ? 'none' : 'block';
+    if (clientWorkspaceSection) clientWorkspaceSection.style.display = isClient ? 'block' : 'none';
 
     if (isClient) {
         populateClientWorkspace();
     } else {
-        populateTalentWorkspace();
+        populateTalentWorkspace(state);
     }
 }
 
@@ -102,46 +128,49 @@ function populateClientWorkspace() {
     const logsList = document.getElementById('communicationLogsList');
     const releaseBtn = document.getElementById('releaseEscrowBtn');
 
-    // 1. Load active projects
-    const projects = JSON.parse(localStorage.getItem('sonumClientProjects') || '[]');
-    projectsList.innerHTML = '';
-    projects.forEach(p => {
-        const row = document.createElement('div');
-        row.className = 'project-row';
-        row.innerHTML = `
-            <span>${p.title}</span>
-            <strong>${p.status}</strong>
-            <progress value="${p.progress}" max="100"></progress>
-        `;
-        projectsList.appendChild(row);
-    });
+    if (projectsList) {
+        const projects = JSON.parse(localStorage.getItem('sonumClientProjects') || '[]');
+        projectsList.innerHTML = '';
+        projects.forEach(p => {
+            const row = document.createElement('div');
+            row.className = 'project-row';
+            row.innerHTML = `
+                <span>${p.title}</span>
+                <strong>${p.status}</strong>
+                <progress value="${p.progress}" max="100"></progress>
+            `;
+            projectsList.appendChild(row);
+        });
+    }
+    if (rosterList) {
+        const saved = JSON.parse(localStorage.getItem('sonumSavedRoster') || '[]');
+        rosterList.innerHTML = '';
+        if (saved.length === 0) {
+            rosterList.innerHTML = `<li><ion-icon name="information-circle-outline"></ion-icon> Saved roster is empty.</li>`;
+        } else {
+            saved.forEach(name => {
+                const li = document.createElement('li');
+                li.innerHTML = `<ion-icon name="person-outline"></ion-icon> ${name} (Saved Favorited)`;
+                rosterList.appendChild(li);
+            });
+        }
+    }
 
-    // 2. Load saved talent favorites
-    const saved = JSON.parse(localStorage.getItem('sonumSavedRoster') || '[]');
-    rosterList.innerHTML = '';
-    if (saved.length === 0) {
-        rosterList.innerHTML = `<li><ion-icon name="information-circle-outline"></ion-icon> Saved roster is empty.</li>`;
-    } else {
-        saved.forEach(name => {
+    if (logsList) {
+        const logs = JSON.parse(localStorage.getItem('sonumCommLogs') || '[]');
+        logsList.innerHTML = '';
+        logs.forEach(l => {
             const li = document.createElement('li');
-            li.innerHTML = `<ion-icon name="person-outline"></ion-icon> ${name} (Saved Favorited)`;
-            rosterList.appendChild(li);
+            li.innerHTML = l;
+            logsList.appendChild(li);
         });
     }
 
-    // 3. Load communication logs
-    const logs = JSON.parse(localStorage.getItem('sonumCommLogs') || '[]');
-    logsList.innerHTML = '';
-    logs.forEach(l => {
-        const li = document.createElement('li');
-        li.innerHTML = l;
-        logsList.appendChild(li);
-    });
-
-    // 4. Billing escrow controls
     const isFunded = localStorage.getItem('sonumEscrowStatus') === 'funded';
-    document.getElementById('billingEscrowHeld').textContent = isFunded ? '$1,000' : '$0';
-    document.getElementById('billingPlatformFee').textContent = isFunded ? '$80' : '$0';
+    const billingEscrowHeld = document.getElementById('billingEscrowHeld');
+    const billingPlatformFee = document.getElementById('billingPlatformFee');
+    if (billingEscrowHeld) billingEscrowHeld.textContent = isFunded ? '$1,000' : '$0';
+    if (billingPlatformFee) billingPlatformFee.textContent = isFunded ? '$80' : '$0';
 
     if (releaseBtn) {
         releaseBtn.disabled = !isFunded;
@@ -197,31 +226,27 @@ window.initEscrowReleaseHandler = initEscrowReleaseHandler;
 document.addEventListener('DOMContentLoaded', initEscrowReleaseHandler);
 
 // Talent Dashboard Population
-function populateTalentWorkspace() {
-    document.getElementById('statProjects').textContent = sessionUser.projects || 0;
-    document.getElementById('statHours').textContent = sessionUser.hours || 0;
-    document.getElementById('statEarnings').textContent = `$${(sessionUser.earnings || 0).toLocaleString()}`;
-    document.getElementById('statRating').textContent = (sessionUser.rating || 5.0).toFixed(1);
+function populateTalentWorkspace(state) {
+    if (document.getElementById('statProjects')) document.getElementById('statProjects').textContent = state.sessionUser?.projects || 0;
+    if (document.getElementById('statHours')) document.getElementById('statHours').textContent = state.sessionUser?.hours || 0;
+    if (document.getElementById('statEarnings')) document.getElementById('statEarnings').textContent = `$${((state.sessionUser?.earnings || 0)).toLocaleString()}`;
+    if (document.getElementById('statRating')) document.getElementById('statRating').textContent = (state.sessionUser?.rating || 5.0).toFixed(1);
 
-    // Profile settings populates
-    document.getElementById('profileName').textContent = sessionUser.fullName;
-    document.getElementById('profileSpecialty').textContent = sessionUser.specialty || "General Vocalist";
-    document.getElementById('profileRating').textContent = (sessionUser.rating || 5.0).toFixed(1);
-    document.getElementById('profileReviews').textContent = sessionUser.reviews || 0;
-    document.getElementById('profileProjects').textContent = sessionUser.projects || 0;
-    document.getElementById('profileBio').textContent = sessionUser.bio;
+    if (document.getElementById('profileName')) document.getElementById('profileName').textContent = state.sessionUser?.fullName || 'Talent';
+    if (document.getElementById('profileSpecialty')) document.getElementById('profileSpecialty').textContent = state.sessionUser?.specialty || "General Vocalist";
+    if (document.getElementById('profileRating')) document.getElementById('profileRating').textContent = (state.sessionUser?.rating || 5.0).toFixed(1);
+    if (document.getElementById('profileReviews')) document.getElementById('profileReviews').textContent = state.sessionUser?.reviews || 0;
+    if (document.getElementById('profileProjects')) document.getElementById('profileProjects').textContent = state.sessionUser?.projects || 0;
+    if (document.getElementById('profileBio')) document.getElementById('profileBio').textContent = state.sessionUser?.bio || '';
 
-    // Attributes fields
-    document.getElementById('profileAttrAge').textContent = sessionUser.age || "25-45";
-    document.getElementById('profileAttrTone').textContent = sessionUser.tone || "Warm, confident";
-    document.getElementById('profileAttrAccent').textContent = sessionUser.accent || "Neutral American";
-    document.getElementById('profileAttrLang').textContent = sessionUser.lang || "English";
-    
-    // Gear fields
-    document.getElementById('profileEquipMic').textContent = sessionUser.mic || "Neumann TLM 103";
-    document.getElementById('profileEquipInterface').textContent = sessionUser.interface || "Apollo Twin Duo";
-    document.getElementById('profileEquipRoom').textContent = sessionUser.room || "Treated Booth";
-    document.getElementById('profileTurnaround').textContent = sessionUser.turnaround || "24 hours";
+    if (document.getElementById('profileAttrAge')) document.getElementById('profileAttrAge').textContent = state.sessionUser?.age || "25-45";
+    if (document.getElementById('profileAttrTone')) document.getElementById('profileAttrTone').textContent = state.sessionUser?.tone || "Warm, confident";
+    if (document.getElementById('profileAttrAccent')) document.getElementById('profileAttrAccent').textContent = state.sessionUser?.accent || "Neutral American";
+    if (document.getElementById('profileAttrLang')) document.getElementById('profileAttrLang').textContent = state.sessionUser?.lang || "English";
+    if (document.getElementById('profileEquipMic')) document.getElementById('profileEquipMic').textContent = state.sessionUser?.mic || "Neumann TLM 103";
+    if (document.getElementById('profileEquipInterface')) document.getElementById('profileEquipInterface').textContent = state.sessionUser?.interface || "Apollo Twin Duo";
+    if (document.getElementById('profileEquipRoom')) document.getElementById('profileEquipRoom').textContent = state.sessionUser?.room || "Treated Booth";
+    if (document.getElementById('profileTurnaround')) document.getElementById('profileTurnaround').textContent = state.sessionUser?.turnaround || "24 hours";
 
     renderBookingRequests();
 }
@@ -334,7 +359,7 @@ function removeBookingCard(id) {
 }
 
 // Profile editing form overlay
-function initProfileEditor() {
+function initProfileEditor(state) {
     const editBtn = document.getElementById('editProfileBtn');
     const cancelBtn = document.getElementById('cancelEditProfileBtn');
     const panel = document.getElementById('profileEditPanel');
@@ -344,21 +369,26 @@ function initProfileEditor() {
 
     editBtn.addEventListener('click', () => {
         panel.classList.add('active');
-        
-        // Populates edit inputs
-        document.getElementById('edit-name').value = sessionUser.fullName;
-        document.getElementById('edit-specialty').value = sessionUser.specialty || 'Commercial & Adverts';
-        document.getElementById('edit-rate').value = 150; // Mock rate default
-        document.getElementById('edit-turnaround').value = sessionUser.turnaround || '24 hours';
-        document.getElementById('edit-age').value = sessionUser.age || '25-45';
-        document.getElementById('edit-accent').value = sessionUser.accent || 'Neutral American';
-        document.getElementById('edit-tone').value = sessionUser.tone || 'Warm, confident';
-        document.getElementById('edit-lang').value = sessionUser.lang || 'English';
-        document.getElementById('edit-mic').value = sessionUser.mic || 'Neumann TLM 103';
-        document.getElementById('edit-interface').value = sessionUser.interface || 'Apollo Twin Duo';
-        document.getElementById('edit-bio').value = sessionUser.bio || '';
-
-        // Scroll to form smoothly
+        const nameInput = document.getElementById('edit-name');
+        const specialtyInput = document.getElementById('edit-specialty');
+        const turnaroundInput = document.getElementById('edit-turnaround');
+        const ageInput = document.getElementById('edit-age');
+        const accentInput = document.getElementById('edit-accent');
+        const toneInput = document.getElementById('edit-tone');
+        const langInput = document.getElementById('edit-lang');
+        const micInput = document.getElementById('edit-mic');
+        const interfaceInput = document.getElementById('edit-interface');
+        const bioInput = document.getElementById('edit-bio');
+        if (nameInput) nameInput.value = state.sessionUser?.fullName || '';
+        if (specialtyInput) specialtyInput.value = state.sessionUser?.specialty || 'Commercial & Adverts';
+        if (turnaroundInput) turnaroundInput.value = state.sessionUser?.turnaround || '24 hours';
+        if (ageInput) ageInput.value = state.sessionUser?.age || '25-45';
+        if (accentInput) accentInput.value = state.sessionUser?.accent || 'Neutral American';
+        if (toneInput) toneInput.value = state.sessionUser?.tone || 'Warm, confident';
+        if (langInput) langInput.value = state.sessionUser?.lang || 'English';
+        if (micInput) micInput.value = state.sessionUser?.mic || 'Neumann TLM 103';
+        if (interfaceInput) interfaceInput.value = state.sessionUser?.interface || 'Apollo Twin Duo';
+        if (bioInput) bioInput.value = state.sessionUser?.bio || '';
         panel.scrollIntoView({ behavior: 'smooth' });
     });
 
@@ -382,18 +412,19 @@ function initProfileEditor() {
             bio: document.getElementById('edit-bio').value
         };
 
-        // Save states
-        window.authSystem.updateUserProfile(updated);
-        sessionUser = { ...sessionUser, ...updated };
+        if (window.authSystem?.updateUserProfile) {
+            window.authSystem.updateUserProfile(updated);
+        }
+        state.sessionUser = { ...state.sessionUser, ...updated };
 
         panel.classList.remove('active');
-        populateTalentWorkspace();
+        populateTalentWorkspace(state);
         showFeedbackToast("Studio profile details updated successfully.", "success");
     });
 }
 
 // Modal handling for Audio Demo upload
-function initDemoUploadModal() {
+function initDemoUploadModal(state) {
     const openBtn = document.getElementById('uploadDemoActionBtn');
     const closeBtn = document.getElementById('closeDemoModalBtn');
     const overlay = document.getElementById('demoModalOverlay');
@@ -402,20 +433,21 @@ function initDemoUploadModal() {
 
     if (!openBtn || !modal) return;
 
-    openBtn.addEventListener('click', () => {
-        modal.style.display = 'block';
-        overlay.style.display = 'block';
-    });
-
     const closeModal = () => {
+        if (overlay) overlay.style.display = 'none';
         modal.style.display = 'none';
-        overlay.style.display = 'none';
     };
 
-    closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', closeModal);
+    openBtn.addEventListener('click', () => {
+        if (overlay) overlay.style.display = 'block';
+        modal.style.display = 'block';
+    });
 
-    form.addEventListener('submit', async (e) => {
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (overlay) overlay.addEventListener('click', closeModal);
+
+    if (form) {
+        form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const category = document.getElementById('demo-category').value;
@@ -442,10 +474,11 @@ function initDemoUploadModal() {
         }
         */
 
-        closeModal();
-        showFeedbackToast(`File "${file.name}" uploaded. Saved category: ${category}.`, "success");
-        form.reset();
-    });
+            closeModal();
+            showFeedbackToast(`File "${file.name}" uploaded. Saved category: ${category}.`, "success");
+            form.reset();
+        });
+    }
 }
 
 function initLogoutHandler() {

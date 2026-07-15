@@ -2,19 +2,19 @@
 
 /* Hero Section */
 .talent-hero {
-    background: linear-gradient(135deg, rgba(7, 8, 11, 0.95) 0%, rgba(22, 25, 38, 0.9) 100%), url('../image/black%20mic.jpg');
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%), linear-gradient(135deg, rgba(7, 8, 11, 0.95) 0%, rgba(22, 25, 38, 0.9) 100%), url('../image/black%20mic.jpg');
     background-size: cover;
     background-position: center;
-    padding: 6rem 8%;
+    padding: 7rem 8%;
     text-align: center;
     color: var(--text-primary);
-    min-height: 38vh;
+    min-height: 40vh;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .hero-content {
@@ -25,10 +25,13 @@
 
 .hero-title {
     font-family: var(--font-heading);
-    font-size: 3.2rem;
+    font-size: 3.4rem;
     font-weight: 800;
     margin-bottom: 1rem;
-    letter-spacing: -1px;
+    letter-spacing: -1.2px;
+    background: linear-gradient(135deg, var(--text-primary) 0%, rgba(243, 244, 246, 0.8) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .hero-subtitle {
@@ -77,20 +80,26 @@
 .search-box {
     flex: 1.5;
     min-width: 250px;
-    padding: 0.75rem 1.2rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
+    padding: 0.85rem 1.4rem;
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
     background-color: var(--bg-color);
     color: var(--text-primary);
     font-family: var(--font-sans);
     font-size: 0.95rem;
     transition: var(--transition-smooth);
+    font-weight: 500;
+}
+
+.search-box::placeholder {
+    color: var(--text-muted);
 }
 
 .search-box:focus {
     outline: none;
     border-color: var(--accent-indigo);
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    background-color: rgba(99, 102, 241, 0.05);
 }
 
 .filter-dropdown {

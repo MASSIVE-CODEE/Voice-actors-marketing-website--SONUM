@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initEscrowSystem();
     initAuditionRevisionLogger();
     initRosterSaving();
+    initReadTimeEstimator();
 });
 
 // Advanced Filtration: query string search, dropdowns, and interactive tag clicks
@@ -89,7 +90,8 @@ let currentPlaybackState = {
     duration: 0,
     elapsed: 0,
     isPlaying: false,
-    timer: null
+    audio: null,
+    rafId: null
 };
 
 function initWaveformPlayerEngine() {
@@ -138,60 +140,102 @@ function initWaveformPlayerEngine() {
 }
 
 function loadAudioReel(talent, demo, duration) {
-    clearInterval(currentPlaybackState.timer);
-    
+    stopAudioPlayback();
+
     currentPlaybackState = {
         talentName: talent,
         demoReel: demo,
         duration: duration,
         elapsed: 0,
         isPlaying: true,
-        timer: null
+        audio: null,
+        rafId: null
     };
 
-    document.getElementById('playerTalentName').textContent = talent;
-    document.getElementById('playerDemoMeta').textContent = demo;
+    const playerTalentName = document.getElementById('playerTalentName');
+    const playerDemoMeta = document.getElementById('playerDemoMeta');
+    if (playerTalentName) playerTalentName.textContent = talent;
+    if (playerDemoMeta) playerDemoMeta.textContent = demo;
 
     drawPlayerProgress();
-    startAudioInterval();
+    startNativeAudioPlayback(demo);
 }
 
 function togglePlayerState() {
     if (!currentPlaybackState.talentName || currentPlaybackState.talentName === 'Select a reel to preview') return;
-    
+
     currentPlaybackState.isPlaying = !currentPlaybackState.isPlaying;
-    
+
     const playIcon = document.getElementById('playerToggleIcon');
     if (playIcon) {
         playIcon.setAttribute('name', currentPlaybackState.isPlaying ? 'pause' : 'play');
     }
 
     if (currentPlaybackState.isPlaying) {
-        startAudioInterval();
+        if (currentPlaybackState.audio) {
+            currentPlaybackState.audio.play().catch(() => {});
+        }
+        startAudioFrameLoop();
     } else {
-        clearInterval(currentPlaybackState.timer);
+        if (currentPlaybackState.audio) {
+            currentPlaybackState.audio.pause();
+        }
+        stopAudioFrameLoop();
         resetListenButtonLabels();
     }
 }
 
-function startAudioInterval() {
-    clearInterval(currentPlaybackState.timer);
-    
-    const playIcon = document.getElementById('playerToggleIcon');
-    if (playIcon) playIcon.setAttribute('name', 'pause');
-
-    currentPlaybackState.timer = setInterval(() => {
-        if (currentPlaybackState.elapsed >= currentPlaybackState.duration) {
-            currentPlaybackState.elapsed = currentPlaybackState.duration;
-            currentPlaybackState.isPlaying = false;
-            clearInterval(currentPlaybackState.timer);
-            if (playIcon) playIcon.setAttribute('name', 'play');
-            resetListenButtonLabels();
-        } else {
-            currentPlaybackState.elapsed++;
-        }
+function startNativeAudioPlayback(demo) {
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = demo && demo.includes('http') ? demo : 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+    audio.addEventListener('durationchange', () => {
+        currentPlaybackState.duration = Math.round(audio.duration || currentPlaybackState.duration || 30);
         drawPlayerProgress();
-    }, 1000);
+    });
+    audio.addEventListener('timeupdate', () => {
+        currentPlaybackState.elapsed = Math.round(audio.currentTime || 0);
+        drawPlayerProgress();
+    });
+    audio.addEventListener('ended', () => {
+        currentPlaybackState.isPlaying = false;
+        currentPlaybackState.elapsed = currentPlaybackState.duration;
+        drawPlayerProgress();
+        resetListenButtonLabels();
+        const playIcon = document.getElementById('playerToggleIcon');
+        if (playIcon) playIcon.setAttribute('name', 'play');
+    });
+
+    currentPlaybackState.audio = audio;
+    audio.play().catch(() => {});
+    startAudioFrameLoop();
+}
+
+function startAudioFrameLoop() {
+    stopAudioFrameLoop();
+    const step = () => {
+        if (currentPlaybackState.audio && currentPlaybackState.isPlaying) {
+            currentPlaybackState.elapsed = Math.round(currentPlaybackState.audio.currentTime || currentPlaybackState.elapsed);
+            drawPlayerProgress();
+        }
+        currentPlaybackState.rafId = window.requestAnimationFrame(step);
+    };
+    currentPlaybackState.rafId = window.requestAnimationFrame(step);
+}
+
+function stopAudioFrameLoop() {
+    if (currentPlaybackState.rafId) {
+        window.cancelAnimationFrame(currentPlaybackState.rafId);
+        currentPlaybackState.rafId = null;
+    }
+}
+
+function stopAudioPlayback() {
+    stopAudioFrameLoop();
+    if (currentPlaybackState.audio) {
+        currentPlaybackState.audio.pause();
+        currentPlaybackState.audio.currentTime = 0;
+    }
 }
 
 function drawPlayerProgress() {
@@ -257,15 +301,17 @@ function initEscrowSystem() {
 // Broadcasting casting jobs
 function initCastingCallForm() {
     const form = document.getElementById('jobPostingForm');
+    const wordsField = document.getElementById('jobWords');
+    const readTimeLabel = document.getElementById('readTimeEstimate');
     if (!form) return;
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        const title = document.getElementById('jobTitle').value;
-        const words = document.getElementById('jobWords').value;
-        const usage = document.getElementById('jobUsage').value;
-        const budget = document.getElementById('jobBudget').value;
+        const title = document.getElementById('jobTitle')?.value || '';
+        const words = document.getElementById('jobWords')?.value || '';
+        const usage = document.getElementById('jobUsage')?.value || '';
+        const budget = document.getElementById('jobBudget')?.value || '';
 
         const newJob = {
             title,
@@ -289,6 +335,31 @@ function initCastingCallForm() {
 
         showToastNotification("Casting call published to matching talent matching tag filters.", "success");
         form.reset();
+        if (readTimeLabel) readTimeLabel.textContent = 'Estimated read time: 0:00';
+    });
+
+    if (wordsField && readTimeLabel) {
+        wordsField.addEventListener('input', () => {
+            const words = Number(wordsField.value || 0);
+            const estimateSeconds = Math.round(words / 140 * 60);
+            const minutes = Math.floor(estimateSeconds / 60);
+            const seconds = estimateSeconds % 60;
+            readTimeLabel.textContent = `Estimated read time: ${minutes}:${String(seconds).padStart(2, '0')}`;
+        });
+    }
+}
+
+function initReadTimeEstimator() {
+    const wordsField = document.getElementById('jobWords');
+    const readTimeLabel = document.getElementById('readTimeEstimate');
+    if (!wordsField || !readTimeLabel) return;
+
+    wordsField.addEventListener('input', () => {
+        const words = Number(wordsField.value || 0);
+        const estimateSeconds = Math.round(words / 140 * 60);
+        const minutes = Math.floor(estimateSeconds / 60);
+        const seconds = estimateSeconds % 60;
+        readTimeLabel.textContent = `Estimated read time: ${minutes}:${String(seconds).padStart(2, '0')}`;
     });
 }
 

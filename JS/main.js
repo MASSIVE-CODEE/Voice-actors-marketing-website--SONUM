@@ -12,12 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
 function initNavigationObserver() {
     const navLinks = document.querySelectorAll('.nav a');
     const sections = document.querySelectorAll('main, section');
-    
+
     if (navLinks.length === 0 || sections.length === 0) return;
 
     const observerOptions = {
         root: null,
-        rootMargin: '-30% 0px -60% 0px', // Trigger activation near viewport center
+        rootMargin: '-30% 0px -60% 0px',
         threshold: 0
     };
 
@@ -47,21 +47,21 @@ function initNavigationObserver() {
 // Smooth scroll implementation with header height offset
 function initSmoothScrolling() {
     const links = document.querySelectorAll('a[href^="#"]');
-    
+
     links.forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
             if (href === '#' || !href.startsWith('#')) return;
-            
+
             e.preventDefault();
             const targetId = href.substring(1);
             const target = document.getElementById(targetId);
-            
+
             if (target) {
                 const headerOffset = 80;
                 const elementPosition = target.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                
+
                 window.scrollTo({
                     top: offsetPosition,
                     behavior: 'smooth'
@@ -74,16 +74,16 @@ function initSmoothScrolling() {
 // Button scale press feedback and dynamic hover shadow offsets
 function initBtnHoverFeedback() {
     const buttons = document.querySelectorAll('.btn, .action-btn, .play-btn');
-    
+
     buttons.forEach(button => {
         button.addEventListener('mousedown', () => {
             button.style.transform = 'scale(0.97)';
         });
-        
+
         button.addEventListener('mouseup', () => {
             button.style.transform = '';
         });
-        
+
         button.addEventListener('mouseleave', () => {
             button.style.transform = '';
         });
